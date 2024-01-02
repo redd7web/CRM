@@ -28,7 +28,14 @@ if(isset($_SESSION['id'])) {
             //Returns string
             $account_ids_commas = substr($account_ids_commas, 0, -1);
 
-            $account_info_request = $db->query("SELECT account_ID,city,state,address,country,zip,name FROM iwp_accounts WHERE account_ID IN ($account_ids_commas)");
+            $account_info_request = $db->query("SELECT account_ID,
+                                                    city,
+                                                    state,
+                                                    address,
+                                                    country,
+                                                    zip,
+                                                    name
+                                                     FROM iwp_accounts WHERE account_ID IN ($account_ids_commas)");
 
             $count = 0;
             $visits = array();
