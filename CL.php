@@ -1,0 +1,1 @@
+<iframe height="630" allowTransparency="true" frameborder="0" scrolling="no" style="width:100%;border:none" src="https://inet.iwpusa.com/machforms/machform/widget.php?key=43646xd06a48930b" title="Cottonseed Testing Log"><a href="https://inet.iwpusa.com/machforms/machform/widget.php?key=43646xd06a48930b" title="Cottonseed Testing Log">Cottonseed Testing Log</a></iframe>

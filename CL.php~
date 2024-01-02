@@ -1,0 +1,10 @@
+<?php session_start(); ?>
+<script src = "js/jquery-1.11.1.js" type = "text/javascript"> </script>
+
+<a href="https://inet.iwpusa.com/machforms/machform/widget.php?key=43646xd06a48930b" title="Cottonseed Testing Log">Cottonseed Testing Log</a>
+
+<script>
+   $('input[type="checkbox"]').click(function(){
+     alert("kjdshjukhfdshfk");                                   
+});
+</script>

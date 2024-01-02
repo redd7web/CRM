@@ -1,0 +1,8 @@
+<style>
+body{
+    padding:100px 100px 100px 100px;
+}
+</style>
+
+<a href="CSM.php" target="_parent">>> Waste Log Form</a><br />
+<a href="CSMbatch.php" target="_parent">>> Submit a Pickup</a>

@@ -1,0 +1,1382 @@
+<?php
+include "protected/global.php";
+include "source/scripts.php";
+include "source/css.php";
+?>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+    $( function() {
+        $( "#tabs" ).tabs({
+        <?php 
+            if(isset($_POST['inbound_submit'])){
+                ?>
+                active:0
+                <?php
+            }else if(isset($_POST['outbound_mx'])){
+                ?>
+                active:1
+                <?php
+            }else if(isset($_POST['outbound_bio'])){
+                ?>
+                active:2
+                <?php
+            }else if(isset($_POST['outbound_mx_grease'])){
+                ?>
+                active:3
+                <?php
+            }else if(isset($_POST['in_wcs'])){
+                ?>
+                active: 4
+                <?php
+            }else if(isset($_POST['inbound'])){
+                ?>
+                active: 5
+                <?php
+            }else if(isset($_POST['in_grease'])){
+                ?>
+                active: 6
+                <?php
+            }else if(isset($_POST['r_grease'])){
+                ?>
+                active: 7
+                <?php
+            }else if(isset($_POST['pet_food'])){
+                ?>
+                active: 8
+                <?php
+            }else{
+                ?>
+                active:0
+                <?php
+            }
+        ?>
+        });
+    });
+  </script>
+  <style type="text/css">
+  body{
+    font-size:12px;
+    background:url(img/bodystrip.jpg) repeat-x left top;
+  }
+.tableNavigation {
+    width:1000px;
+    text-align:center;
+    margin:auto;
+    overflow-x:auto;
+}
+.tableNavigation ul {
+    display:inline;
+    width:1000px;
+}
+.tableNavigation ul li {
+    display:inline;
+    margin-right:5px;
+}
+
+#myTable th{
+    padding:5px 5px 5px 5px;
+}
+#myTable td {
+     padding:5px 5px 5px 5px;  
+}
+
+td{
+    background:transparent;
+    border:0px solid #bbb;  
+    padding:0px 0px 0px 0px;  
+    text-align:center;
+    font-size:12px;
+    
+    
+}
+th{
+    font-size:13px;
+    white-space: nowrap;
+    
+    width:auto;
+}
+tr.even{
+    background:-moz-linear-gradient(center top , #F7F7F9, #E5E5E7);
+}
+
+tr.odd{
+    background:transparent;
+}
+.setThisRoute{ 
+    z-index:9999;
+}
+
+
+
+input[type=checkbox]{
+    width:10px;
+}
+
+</style>
+<script>
+
+$(document).ready(function(){
+   $('.myTable').dataTable({
+        "order": [ 2, 'asc' ],
+        "lengthMenu": [ [10, 25, 50,100,150, -1], [10, 25, 50,100,150, "All"] ]
+   }); 
+});
+</script> 
+<div id="tabs" style="width: auto;display:inline-block;">
+  <ul>
+    <li><a href="#fragment-1">OutBound</a></li>
+    <li><a href="#fragment-2">OutBound MX</a></li>
+    <li><a href="#fragment-3">OutBound BIO</a></li>
+    <li><a href="#fragment-4">OutBound MX Grease</a></li>
+    <li><a href="#fragment-5">IN WCS</a></li>
+    <li><a href="#fragment-6">Inbound</a></li>
+    <li><a href="#fragment-7">IN-Grease</a></li>
+    <li><a href="#fragment-8">R-Water</a></li>
+    <li><a href="#fragment-9">Pet Food</a></li>
+  </ul>
+  <div id="fragment-1">
+    <?php
+        if(isset($_POST['inbound_submit'])){
+            unset($ib);
+            foreach($_POST as $name=>$value){
+                switch($name){
+                    case "outbound_from":
+                        if(strlen($value)>0 && $value !=' '){
+                            $ib[] = " DATE(date_created) >='$value'";
+                        }
+                    break;
+                    case "outbound_to":
+                        if(strlen($value)>0 && $value !=' '){
+                             $ib[] = " DATE(date_created) <='$value'";
+                        }
+                    break;
+                }
+            }
+            
+            if(!empty($ib)>0){
+                $string = " AND ".implode(" AND ", $ib);
+            }
+            //echo "SELECT * FROM Inetforms.ap_form_43256 WHERE element_1 = 4 $string";
+            $outbound = $db->query("SELECT * FROM Inetforms.ap_form_43256 WHERE element_1 = 4 $string");
+        }else{
+            $outbound = $db->query("SELECT * FROM Inetforms.ap_form_43256 WHERE element_1 = 4");
+        }
+    
+    ?>
+    <form action="CompletedIO.php" method="POST">
+    <table class="myTable"> 
+        <thead>
+            <tr><td><input class="from" type="text" name="outbound_from" value="<?php echo $_POST['outbound_from']; ?>" placeholder="FROM"/></td><td>TO</td><td><input class="to" type="text" name="outbound_to" value="<?php echo $_POST['outbound_to']; ?>"  placeholder="TO"/></td><td><input type="submit" name="inbound_submit" value="Search"/></td></tr>
+            <tr>
+                <th>Created By</th>
+                <th>Date</th>
+                <th>Status</th>                
+                <th>Commodity</th>
+                <th>Ship To:</th>
+                <th>Net Weight</th>
+                <th>Weight Ticket</th>
+                <th>Carrier</th>
+                <th>Driver</th>
+                <th>Sale</th>
+                <th>Lot #</th>
+                <th>Notes</th>
+                <td>View Lab Results</td>
+                <td>View BOL</td>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+                if(count($outbound)>0){
+                    foreach($outbound as $ob){
+                        switch($ob['element_114']){
+                            case "1":
+                            $creator = "Johnny";
+                            break;
+                            case "2":
+                            $creator = "Mario";
+                            break;
+                            case "3":
+                            $creator = "Other";
+                            break;
+                        }
+                        switch($ob['element_62']){
+                            case "1":
+                            $comm = "TR/CS";
+                            break;                            
+                            case "2":
+                            $comm = "Bakery";
+                            break;
+                            case "3":
+                            $comm = "Other";
+                            break;
+                            
+                        }
+                        switch($ob['element_64']){
+                            case "1":
+                            $shipto = "West Star North";
+                            break;
+                            case "4":
+                            $shipto ="Schaffner";
+                            break;
+                            case "2":
+                            $shipto = "Other";
+                            break;
+                        }
+                        switch($ob['element_68']){
+                            case "1":
+                            $carrier = "IWP";
+                            break;
+                            case "4":
+                            $carrier = "Darrell Green";
+                            break;
+                            case "5":
+                            $carrier = "Cruz";
+                            break;
+                            case "2":
+                            $carrier = "other";
+                            break;
+                        }
+                        switch($ob['element_70']){
+                            case "1":
+                                $driver ="Caesar";
+                            break;
+                            case "4":
+                                $driver = "Jesus";
+                            break;
+                            case "2":
+                                $driver = "Other";
+                            break;
+                        }
+                        echo "<tr>
+                            <td>$creator</td>
+                            <td>$ob[date_created]</td>
+                            <td>$ob[element_4]</td>
+                            <td>$comm</td>
+                            <td>$shipto</td>
+                            <td>$ob[element_66]</td>
+                            <td>$ob[element_67]</td>
+                            <td>$carrier</td>
+                            <td>$driver</td>
+                            <td>$ob[element_72]</td>
+                            <td>$ob[element_73]</td>
+                            <td>$ob[element_74]</td>
+                            <td><a href='ER.php?truck=$ob[id]' rel='shadowbox'><img src='img/search.jpg'/></a></td>
+                            <td><a href='BOL.php?from_io=1&wtn=$ob[element_67]' rel='shadowbox'><img src='img/table_edit.png'/></a></td>
+                        </tr>";
+                    }
+                }
+            ?>
+        </tbody>
+    </table>
+    </form>
+  </div>
+  <div id="fragment-2">
+     <form action="CompletedIO.php" method="post">
+    <table class="myTable">
+         <thead>
+             <tr><td><input class="from" type="text" name="outbound_mx_from" value="<?php echo $_POST['outbound_mx_from']; ?>" placeholder="FROM"/></td><td>TO</td><td><input class="to" type="text" name="outbound_mx_to" value="<?php echo $_POST['outbound_mx_to']; ?>"  placeholder="TO"/></td><td><input type="submit" name="outbound_mx"  value="Search"/></td></tr>
+            <tr>
+                <th>Created By</th>
+                <th>Date</th>
+                <th>Status</th>                
+                <th>Commodity</th>
+                <th>Ship To:</th>
+                <th>Net Weight</th>
+                <th>Weight Ticket</th>
+                <th>Carrier</th>
+                <th>Driver</th>
+                <th>Release</th>
+                <th>Lot #</th>
+                <th>Notes</th>
+                <td>View Lab Results</td>
+                <td>View BOL</td>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            
+            if(isset($_POST['outbound_mx'])){
+                unset($ib);
+                foreach($_POST as $name=>$value){
+                    switch($name){
+                        case "outbound_mx_from":
+                            if(strlen($value)>0 && $value !=' '){
+                                $ib[] = " DATE(date_created) >='$value'";
+                            }
+                        break;
+                        case "outbound_mx_to":
+                            if(strlen($value)>0 && $value !=' '){
+                                 $ib[] = " DATE(date_created) <='$value'";
+                            }
+                        break;
+                    }
+                }
+                
+                if(!empty($ib)>0){
+                    $string = " AND ".implode(" AND ", $ib);
+                }
+                echo "SELECT * FROM Inetforms.ap_form_43256 WHERE element_1 = 5 $string";
+                $outbound = $db->query("SELECT * FROM Inetforms.ap_form_43256 WHERE element_1 = 5 $string");
+            }else{
+                $outbound = $db->query("SELECT * FROM Inetforms.ap_form_43256 WHERE element_1 = 5");
+            }
+        
+        
+        if(count($outbound)>0){
+                    foreach($outbound as $ob){
+                        switch($ob['element_114']){
+                            case "1":
+                            $creator = "Johnny";
+                            break;
+                            case "2":
+                            $creator = "Mario";
+                            break;
+                            case "3":
+                            $creator = "Other";
+                            break;
+                        }
+                        switch($ob['element_75']){
+                            case "1":
+                            $comm = "TR/CS";
+                            break;                            
+                            case "2":
+                            $comm = "Bakery";
+                            break;
+                            case "3":
+                            $comm = "Other";
+                            break;
+                            
+                        }
+                        switch($ob['element_77']){
+                            case "1":
+                            $shipto = "West Star North";
+                            break;
+                            case "4":
+                            $shipto ="Schaffner";
+                            break;
+                            case "2":
+                            $shipto = "Other";
+                            break;
+                        }
+                        switch($ob['element_81']){
+                            case "1":
+                            $carrier = "IWP";
+                            break;
+                            case "4":
+                            $carrier = "Darrell Green";
+                            break;
+                            case "5":
+                            $carrier = "Cruz";
+                            break;
+                            case "2":
+                            $carrier = "other";
+                            break;
+                        }
+                        switch($ob['element_83']){
+                            case "1":
+                                $driver ="Caesar";
+                            break;
+                            case "4":
+                                $driver = "Jesus";
+                            break;
+                            case "2":
+                                $driver = "Other";
+                            break;
+                        }
+                        echo "<tr>
+                            <td>$creator</td>
+                            <td>$ob[date_created]</td>
+                            <td>$ob[element_4]</td>
+                            <td>$comm</td>
+                            <td>$shipto</td>
+                            <td>$ob[element_79]</td>
+                            <td>$ob[element_80]</td>
+                            <td>$carrier</td>
+                            <td>$driver</td>
+                            <td>$ob[element_85]</td>
+                            <td>$ob[element_86]</td>
+                            <td>$ob[element_111]</td>
+                            <td><a href='ER.php?truck=$ob[id]' rel='shadowbox'><img src='img/search.jpg'/></a></td>
+                            <td><a href='BOL.php?from_io=1&wtn=$ob[element_80]' rel='shadowbox'><img src='img/table_edit.png'/></a></td>
+                        </tr>";
+                    }
+                }
+    ?>
+        </tbody>
+    </table></form>
+  </div>
+  <div id="fragment-3">
+     <?php
+     
+            if(isset($_POST['outbound_bio'])){
+                foreach($_POST as $name=>$value){
+                    switch($name){
+                        case "outbound_bio_from":
+                            if(strlen($value)>0 && $value !=' '){
+                                $ib[] = " DATE(date_created) >='$value'";
+                            }
+                        break;
+                        case "outbound_bio_to":
+                            if(strlen($value)>0 && $value !=' '){
+                                 $ib[] = " DATE(date_created) <='$value'";
+                            }
+                        break;
+                    }
+                }
+                
+                if(!empty($ib)>0){
+                    $string = " AND ".implode(" AND ", $ib);
+                }
+                //echo "SELECT * FROM Inetforms.ap_form_43256 WHERE element_1 = 6 $string";
+                $outbound = $db->query("SELECT * FROM Inetforms.ap_form_43256 WHERE element_1 = 6 $string");
+            }else{
+                $outbound = $db->query("SELECT * FROM Inetforms.ap_form_43256 WHERE element_1 = 6");
+            }
+       
+        
+    ?>
+    <form action="CompletedIO.php" method="post">
+    <table class="myTable">
+         <thead>
+             <tr><td><input class="from" type="text" name="outbound_bio_from" value="<?php echo $_POST['outbound_bio_from']; ?>" placeholder="FROM"/></td><td>TO</td><td><input class="to" type="text" name="outbound_bio_to" value="<?php echo $_POST['outbound_bio_to']; ?>"  placeholder="TO"/></td><td><input type="submit" name="outbound_bio"  value="Search"/></td></tr>
+            <tr>
+                <th>Created By</th>
+                <th>Date</th>
+                <th>Status</th>                
+                <th>Commodity</th>
+                <th>Ship To:</th>
+                <th>Net Weight</th>
+                <th>Weight Ticket</th>
+                <th>Carrier</th>
+                <th>Driver</th>                
+                <th>Notes</th>
+                <td>View Lab Results</td>
+                <td>View BOL</td>
+            </tr>
+        </thead>
+        <tbody>
+        <?php
+        if(count($outbound)>0){
+            foreach($outbound as $ob){
+                switch($ob['element_114']){
+                    case "1":
+                    $creator = "Johnny";
+                    break;
+                    case "2":
+                    $creator = "Mario";
+                    break;
+                    case "3":
+                    $creator = "Other";
+                    break;
+                }
+                switch($ob['element_88']){
+                    case "1":
+                    $comm = "TR/CS";
+                    break;                            
+                    case "2":
+                    $comm = "Bakery";
+                    break;
+                    case "3":
+                    $comm = "Other";
+                    break;
+                    
+                }
+                switch($ob['element_90']){
+                    case "1":
+                    $shipto = "West Star North";
+                    break;
+                    case "4":
+                    $shipto ="Schaffner";
+                    break;
+                    case "2":
+                    $shipto = "Other";
+                    break;
+                }
+                switch($ob['element_94']){
+                    case "1":
+                    $carrier = "IWP";
+                    break;
+                    case "4":
+                    $carrier = "Darrell Green";
+                    break;
+                    case "5":
+                    $carrier = "Cruz";
+                    break;
+                    case "2":
+                    $carrier = "other";
+                    break;
+                }
+                switch($ob['element_96']){
+                    case "1":
+                        $driver ="Caesar";
+                    break;
+                    case "4":
+                        $driver = "Jesus";
+                    break;
+                    case "2":
+                        $driver = "Other";
+                    break;
+                }
+                echo "<tr>
+                    <td>$creator</td>
+                    <td>$ob[date_created]</td>
+                    <td>$ob[element_4]</td>
+                    <td>$comm</td>
+                    <td>$shipto</td>
+                    <td>$ob[element_92]</td>
+                    <td>$ob[element_93]</td>
+                    <td>$carrier</td>
+                    <td>$driver</td>         
+                    <td>$ob[element_87]</td>
+                    <td><a href='ER.php?truck=$ob[id]' rel='shadowbox'><img src='img/search.jpg'/></a></td>
+                    <td><a href='BOL.php?from_io=1&wtn=$ob[element_93]' rel='shadowbox'><img src='img/table_edit.png'/></a></td>
+                </tr>";
+            }
+        }
+        ?>
+        </tbody>
+    </table>
+    </form>
+  </div>
+  <div id="fragment-4">
+    <?php
+        if(isset($_POST['outbound_mx_grease'])){
+            unset($ib);
+            foreach($_POST as $name=>$value){
+                switch($name){
+                    case "outbound_mx_grease_from":
+                        if(strlen($value)>0 && $value !=' '){
+                            $ib[] = " DATE(date_created) >='$value'";
+                        }
+                    break;
+                    case "outbound_mx_grease_to":
+                        if(strlen($value)>0 && $value !=' '){
+                             $ib[] = " DATE(date_created) <='$value'";
+                        }
+                    break;
+                }
+            }
+            
+            if(!empty($ib)>0){
+                $string = " AND ".implode(" AND ", $ib);
+            }
+            //echo "SELECT * FROM Inetforms.ap_form_43256 WHERE element_1 = 4 $string";
+            $outbound = $db->query("SELECT * FROM Inetforms.ap_form_43256 WHERE element_1 = 7 $string");
+        }else{
+            $outbound = $db->query("SELECT * FROM Inetforms.ap_form_43256 WHERE element_1 = 7");
+        }
+        
+    ?>
+    <form action="CompletedIO.php" method="post">
+    <table class="myTable">
+         <thead>
+             <tr><td><input class="from" type="text" name="outbound_mx_grease_from" value="<?php echo $_POST['outbound_mx_grease_from']; ?>" placeholder="FROM"/></td><td>TO</td><td><input class="to" type="text" name="outbound_mx_grease_to" value="<?php echo $_POST['outbound_mx_grease_to']; ?>"  placeholder="TO"/></td><td><input type="submit" name="outbound_mx_grease"  value="Search"/></td></tr>
+            <tr>
+                <th>Created By</th>
+                <th>Date</th>
+                <th>Status</th>                
+                <th>Commodity</th>
+                <th>Ship To:</th>
+                <th>Net Weight</th>
+                <th>Weight Ticket</th>
+                <th>Carrier</th>
+                <th>Driver</th>
+                <th>Tank #</th>
+                <th>Release Number</th>
+                <th>Notes</th>
+                <td>View Lab Results</td>
+                <td>View BOL</td>
+            </tr>
+        </thead>
+        <tbody>
+        <?php
+            if(count($outbound)>0){
+                foreach($outbound as $ob){
+                    switch($ob['element_114']){
+                        case "1":
+                        $creator = "Johnny";
+                        break;
+                        case "2":
+                        $creator = "Mario";
+                        break;
+                        case "3":
+                        $creator = "Other";
+                        break;
+                    }
+                    switch($ob['element_100']){
+                        case "1":
+                        $comm = "TR/CS";
+                        break;                            
+                        case "2":
+                        $comm = "Bakery";
+                        break;
+                        case "3":
+                        $comm = "Other";
+                        break;
+                        
+                    }
+                    switch($ob['element_102']){
+                        case "1":
+                        $shipto = "West Star North";
+                        break;
+                        case "4":
+                        $shipto ="Schaffner";
+                        break;
+                        case "2":
+                        $shipto = "Other";
+                        break;
+                    }
+                    switch($ob['element_106']){
+                        case "1":
+                        $carrier = "IWP";
+                        break;
+                        case "4":
+                        $carrier = "Darrell Green";
+                        break;
+                        case "5":
+                        $carrier = "Cruz";
+                        break;
+                        case "2":
+                        $carrier = "other";
+                        break;
+                    }
+                    switch($ob['element_108']){
+                        case "1":
+                            $driver ="Caesar";
+                        break;
+                        case "4":
+                            $driver = "Jesus";
+                        break;
+                        case "2":
+                            $driver = "Other";
+                        break;
+                    }
+                    echo "<tr>
+                        <td>$creator</td>
+                        <td>$ob[date_created]</td>
+                        <td>$ob[element_4]</td>
+                        <td>$comm</td>
+                        <td>$shipto</td>
+                        <td>$ob[element_104]</td>
+                        <td>$ob[element_105]</td>
+                        <td>$carrier</td>
+                        <td>$driver</td>         
+                        <td>$ob[element_112]</td>
+                        <td>$ob[element_110]</td>
+                        <td>$ob[element_113]</td>
+                        <td><a href='ER.php?truck=$ob[id]' rel='shadowbox'><img src='img/search.jpg'/></a></td>
+                        <td><a href='BOL.php?from_io=1&wtn=$ob[element_105]' rel='shadowbox'><img src='img/table_edit.png'/></a></td>
+                    </tr>";
+                }
+            }
+        ?>
+        </tbody>
+    </table>
+  </div>
+  <div id="fragment-5">
+     <?php
+        if(isset($_POST['in_wcs'])){
+            unset($ib);
+            foreach($_POST as $name=>$value){
+                switch($name){
+                    case "in_wcs_from":
+                        if(strlen($value)>0 && $value !=' '){
+                            $ib[] = " DATE(date_created) >='$value'";
+                        }
+                    break;
+                    case "in_wcs_to":
+                        if(strlen($value)>0 && $value !=' '){
+                             $ib[] = " DATE(date_created) <='$value'";
+                        }
+                    break;
+                }
+            }
+            
+            if(!empty($ib)>0){
+                $string = " AND ".implode(" AND ", $ib);
+            }
+            //echo "SELECT * FROM Inetforms.ap_form_43256 WHERE element_1 = 4 $string";
+            $outbound = $db->query("SELECT * FROM Inetforms.ap_form_43256 WHERE element_1 = 3 $string");
+        }else{
+            $outbound = $db->query("SELECT * FROM Inetforms.ap_form_43256 WHERE element_1 = 3");
+        }
+        
+    ?>
+    <form action="CompletedIO.php" method="post">
+    <table class="myTable">
+         <thead>
+             <tr><td><input class="from" type="text" name="in_wcs_from" value="<?php echo $_POST['in_wcs_from']; ?>" placeholder="FROM"/></td><td>TO</td><td><input class="to" type="text" name="in_wcs_to" value="<?php echo $_POST['in_wcs_to']; ?>"  placeholder="TO"/></td><td><input type="submit" name="in_wcs"  value="Search"/></td></tr>
+            <tr>
+                <th>Created By</th>
+                <th>Date</th>
+                <th>Status</th>                
+                <th>Commodity</th>
+                <th>Ship To:</th>
+                <th>Net Weight</th>
+                <th>Weight Ticket</th>
+                <th>Carrier</th>
+                <th>Driver</th>
+                <th>Pile</th>
+                <th>Notes</th>
+                <th>Incoming Weight Cert </th>
+                <th>Incoming Gross</th>
+                <th>Incoming Tare </th>
+                <th>Incoming Net </th>
+                <td>View Lab Results</td>
+                <td>View BOL</td>
+            </tr>
+        </thead>
+        <tbody>
+        <?php
+            if(count($outbound)>0){
+                foreach($outbound as $ob){
+                    switch($ob['element_114']){
+                        case "1":
+                        $creator = "Johnny";
+                        break;
+                        case "2":
+                        $creator = "Mario";
+                        break;
+                        case "3":
+                        $creator = "Other";
+                        break;
+                    }
+                    switch($ob['element_26']){
+                        case "1":
+                        $comm = "TR/CS";
+                        break;                            
+                        case "2":
+                        $comm = "Bakery";
+                        break;
+                        case "3":
+                        $comm = "Other";
+                        break;
+                        
+                    }
+                    switch($ob['element_28']){
+                        case "1":
+                        $shipto = "West Star North";
+                        break;
+                        case "4":
+                        $shipto ="Schaffner";
+                        break;
+                        case "2":
+                        $shipto = "Other";
+                        break;
+                    }
+                    switch($ob['element_32']){
+                        case "1":
+                        $carrier = "IWP";
+                        break;
+                        case "4":
+                        $carrier = "Darrell Green";
+                        break;
+                        case "5":
+                        $carrier = "Cruz";
+                        break;
+                        case "2":
+                        $carrier = "other";
+                        break;
+                    }
+                    switch($ob['element_34']){
+                        case "1":
+                            $driver ="Caesar";
+                        break;
+                        case "4":
+                            $driver = "Jesus";
+                        break;
+                        case "2":
+                            $driver = "Other";
+                        break;
+                    }
+                    echo "<tr>
+                        <td>$creator</td>
+                        <td>$ob[date_created]</td>
+                        <td>$ob[element_4]</td>
+                        <td>$comm</td>
+                        <td>$shipto</td>
+                        <td>$ob[element_30]</td>
+                        <td>$ob[element_31]></td>
+                        <td>$carrier</td>
+                        <td>$driver</td>         
+                        <td>$ob[element_36]</td>
+                        <td>$ob[element_37]</td>
+                        <td>$ob[element_120]</td>
+                        <td>$ob[element_121]</td>
+                        <td>$ob[element_122]</td>
+                        <td>$ob[element_123]</td>
+                        <td><a href='ER.php?truck=$ob[id]' rel='shadowbox'><img src='img/search.jpg'/></a></td>
+                        <td><a href='BOL.php?from_io=1&wtn=$ob[element_31]' rel='shadowbox'><img src='img/table_edit.png'/></a></td>
+                    </tr>";
+                }
+            }
+        
+        ?>
+        </tbody>
+    </table></form>
+  </div>
+  <div id="fragment-6">
+    <?php        
+        if(isset($_POST['inbound'])){
+            unset($ib);
+            foreach($_POST as $name=>$value){
+                switch($name){
+                    case "inbound_from":
+                        if(strlen($value)>0 && $value !=' '){
+                            $ib[] = " DATE(date_created) >='$value'";
+                        }
+                    break;
+                    case "inbound_to":
+                        if(strlen($value)>0 && $value !=' '){
+                             $ib[] = " DATE(date_created) <='$value'";
+                        }
+                    break;
+                }
+            }
+            
+            if(!empty($ib)>0){
+                $string = " AND ".implode(" AND ", $ib);
+            }
+            //echo "SELECT * FROM Inetforms.ap_form_43256 WHERE element_1 = 4 $string";
+            $outbound = $db->query("SELECT * FROM Inetforms.ap_form_43256 WHERE element_1 = 1 $string");
+        }else{
+            $outbound = $db->query("SELECT * FROM Inetforms.ap_form_43256 WHERE element_1 = 1");
+        }
+    
+    ?>
+    <form action="CompletedIO.php" method="POST">
+    <table class="myTable"> 
+        <thead>
+            <tr><td><input class="from" type="text" name="inbound_from" value="<?php echo $_POST['inbound_from']; ?>" placeholder="FROM"/></td><td>TO</td><td><input class="to" type="text" name="inbound_to" value="<?php echo $_POST['inbound_to']; ?>"  placeholder="TO"/></td><td><input type="submit" name="inbound"  value="Search"/></td></tr>
+            <tr>
+                <th>Created By</th>
+                <th>Date</th>
+                <th>Status</th>                
+                <th>Commodity</th>
+                <th>Ship To:</th>
+                <th>Net Weight</th>
+                <th>Weight Ticket</th>
+                <th>Carrier</th>
+                <th>Driver</th>
+                <th>Release</th>
+                <th>Notes</th>
+                <th>Incoming Weight Cert </th>
+                <th>Incoming Gross</th>
+                <th>Incoming Tare </th>
+                <th>Incoming Net </th>
+                <td>View Lab Results</td>
+                <td>View BOL</td>
+            </tr>
+        </thead>
+        <tbody>
+        <?php
+            if(count($outbound)>0){
+                foreach($outbound as $ob){
+                    switch($ob['element_114']){
+                        case "1":
+                        $creator = "Johnny";
+                        break;
+                        case "2":
+                        $creator = "Mario";
+                        break;
+                        case "3":
+                        $creator = "Other";
+                        break;
+                    }
+                    switch($ob['element_14']){
+                        case "1":
+                        $comm = "TR/CS";
+                        break;                            
+                        case "2":
+                        $comm = "Bakery";
+                        break;
+                        case "3":
+                        $comm = "Other";
+                        break;
+                        
+                    }
+                    switch($ob['element_16']){
+                        case "1":
+                        $shipto = "West Star North";
+                        break;
+                        case "4":
+                        $shipto ="Schaffner";
+                        break;
+                        case "2":
+                        $shipto = "Other";
+                        break;
+                    }
+                    switch($ob['element_20']){
+                        case "1":
+                        $carrier = "IWP";
+                        break;
+                        case "4":
+                        $carrier = "Darrell Green";
+                        break;
+                        case "5":
+                        $carrier = "Cruz";
+                        break;
+                        case "2":
+                        $carrier = "other";
+                        break;
+                    }
+                    switch($ob['element_22']){
+                        case "1":
+                            $driver ="Caesar";
+                        break;
+                        case "4":
+                            $driver = "Jesus";
+                        break;
+                        case "2":
+                            $driver = "Other";
+                        break;
+                    }
+                    echo "<tr>
+                        <td>$creator</td>
+                        <td>$ob[date_created]</td>
+                        <td>$ob[element_4]</td>
+                        <td>$comm</td>
+                        <td>$shipto</td>
+                        <td>$ob[element_18]</td>
+                        <td>$ob[element_19]</td>
+                        <td>$carrier</td>
+                        <td>$driver</td>         
+                        <td>$ob[element_24]</td>
+                        <td>$ob[element_25]</td>
+                        <td>$ob[element_116]</td>
+                        <td>$ob[element_117]</td>
+                        <td>$ob[element_118]</td>
+                        <td>$ob[element_119]</td>
+                        <td><a href='ER.php?truck=$ob[id]' rel='shadowbox'><img src='img/search.jpg'/></a></td>
+                        <td><a href='BOL.php?from_io=1&wtn=$ob[element_19]'  rel='shadowbox'><img src='img/table_edit.png'/></a></td>
+                    </tr>";
+                }
+            }
+        
+        ?>
+        </tbody>
+    </table></form>
+  </div>
+  <div id="fragment-7">
+    <?php
+     
+        if(isset($_POST['in_grease'])){
+            unset($ib);
+            foreach($_POST as $name=>$value){
+                switch($name){
+                    case "in_grease_from":
+                        if(strlen($value)>0 && $value !=' '){
+                            $ib[] = " DATE(date_created) >='$value'";
+                        }
+                    break;
+                    case "in_grease_to":
+                        if(strlen($value)>0 && $value !=' '){
+                             $ib[] = " DATE(date_created) <='$value'";
+                        }
+                    break;
+                }
+            }
+            
+            if(!empty($ib)>0){
+                $string = " AND ".implode(" AND ", $ib);
+            }
+            //echo "SELECT * FROM Inetforms.ap_form_43256 WHERE element_1 = 4 $string";
+            $outbound = $db->query("SELECT * FROM Inetforms.ap_form_43256 WHERE element_1 = 2 $string");
+        }else{
+            $outbound = $db->query("SELECT * FROM Inetforms.ap_form_43256 WHERE element_1 = 2");
+        }
+    
+    ?>
+    <form action="CompletedIO.php" method="POST">
+    <table class="myTable"> 
+        <thead>
+            <tr><td><input class="from" type="text" name="in_grease_from" value="<?php echo $_POST['in_grease_from']; ?>" placeholder="FROM"/></td><td>TO</td><td><input class="to" type="text" name="in_grease_to" value="<?php echo $_POST['in_grease_to']; ?>"  placeholder="TO"/></td><td><input type="submit" name="in_grease"  value="Search"/></td></tr>
+            <tr>
+                <th>Created By</th>
+                <th>Date</th>
+                <th>Status</th>                
+                <th>Commodity</th>
+                <th>Ship To:</th>
+                <th>Net Weight</th>
+                <th>Weight Ticket</th>
+                <th>Carrier</th>
+                <th>Driver</th>
+                <th>Tanker</th>
+                <th>Notes</th>
+                <th>Time In</th>
+                <th>Time Out</th>
+                <th>Incoming Weight Cert </th>
+                <th>Incoming Gross</th>
+                <th>Incoming Tare </th>
+                <th>Incoming Net </th>
+                <td>View Lab Results</td>
+                <td>View BOL</td>
+            </tr>
+        </thead>
+        <tbody>
+        <?php
+            if(count($outbound)>0){
+                foreach($outbound as $ob){
+                    switch($ob['element_114']){
+                            case "1":
+                            $creator = "Johnny";
+                            break;
+                            case "2":
+                            $creator = "Mario";
+                            break;
+                            case "3":
+                            $creator = "Other";
+                            break;
+                        }
+                        switch($ob['element_38']){
+                            case "1":
+                            $comm = "TR/CS";
+                            break;                            
+                            case "2":
+                            $comm = "Bakery";
+                            break;
+                            case "3":
+                            $comm = "Other";
+                            break;
+                            
+                        }
+                        switch($ob['element_40']){
+                            case "1":
+                            $shipto = "West Star North";
+                            break;
+                            case "4":
+                            $shipto ="Schaffner";
+                            break;
+                            case "2":
+                            $shipto = "Other";
+                            break;
+                        }
+                        switch($ob['element_44']){
+                            case "1":
+                            $carrier = "IWP";
+                            break;
+                            case "4":
+                            $carrier = "Darrell Green";
+                            break;
+                            case "5":
+                            $carrier = "Cruz";
+                            break;
+                            case "2":
+                            $carrier = "other";
+                            break;
+                        }
+                        switch($ob['element_46']){
+                            case "1":
+                                $driver ="Caesar";
+                            break;
+                            case "4":
+                                $driver = "Jesus";
+                            break;
+                            case "2":
+                                $driver = "Other";
+                            break;
+                        }
+                    echo "<tr>                    
+                        <td>$creator</td>
+                        <td>$ob[date_created]</td>
+                        <td>$ob[element_4]</td>
+                        <td>$comm</td>
+                        <td>$shipto</td>
+                        <td>$ob[element_42]</td>
+                        <td>$ob[element_43]</td>
+                        <td>$carrier</td>
+                        <td>$driver</td>       
+                        <td>$ob[element_48]</td>
+                        <td>$ob[element_49]</td>
+                        <td>$ob[element_98]</td>
+                        <td>$ob[element_99]</td>
+                        <td>$ob[element_124]</td>
+                        <td>$ob[element_127]</td>
+                        <td>$ob[element_125]</td>
+                        <td>$ob[element_126]</td>
+                        <td><a href='ER.php?truck=$ob[id]' rel='shadowbox'><img src='img/search.jpg'/></a></td>
+                        <td><a href='BOL.php?from_io=1&wtn=$ob[element_43]'  rel='shadowbox'><img src='img/table_edit.png'/></a></td>
+                    </tr>";
+                }
+            }
+        ?>
+        </tbody>
+    </table></form>
+  </div>
+  <div id="fragment-8">
+     <?php
+      
+        if(isset($_POST['r_grease'])){
+            unset($ib);
+            foreach($_POST as $name=>$value){
+                switch($name){
+                    case "r_grease_from":
+                        if(strlen($value)>0 && $value !=' '){
+                            $ib[] = " DATE(date_created) >='$value'";
+                        }
+                    break;
+                    case "r_grease_to":
+                        if(strlen($value)>0 && $value !=' '){
+                             $ib[] = " DATE(date_created) <='$value'";
+                        }
+                    break;
+                }
+            }
+            
+            if(!empty($ib)>0){
+                $string = " AND ".implode(" AND ", $ib);
+            }
+            //echo "SELECT * FROM Inetforms.ap_form_43256 WHERE element_1 = 4 $string";
+            $outbound = $db->query("SELECT * FROM Inetforms.ap_form_43256 WHERE element_1 = 8 $string");
+        }else{
+            $outbound = $db->query("SELECT * FROM Inetforms.ap_form_43256 WHERE element_1 = 8");
+        }
+    
+    ?>
+    <form action="CompletedIO.php" method="POST">
+    <table class="myTable"> 
+        <thead>
+            <tr><td><input class="from" type="text" name="r_grease_from" value="<?php echo $_POST['r_grease_from']; ?>" placeholder="FROM"/></td><td>TO</td><td><input class="to" type="text" name="r_grease_to" value="<?php echo $_POST['r_grease_to']; ?>"  placeholder="TO"/></td><td><input type="submit" name="r_grease"  value="Search"/></td></tr>
+            <tr>
+                <th>Created By</th>
+                <th>Date</th>
+                <th>Status</th>    
+                <th>Origin</th>
+                <th>Destination</th>
+                <th>Net Weight</th>
+                <th>Weight Ticket</th>
+                <th>Carrier</th>
+                <th>Driver</th>
+                <th>Tank</th>
+                <th>Notes</th>
+                <td>View Lab Results</td>
+                <td>View BOL</td>       
+            </tr>
+        </thead>
+        <tbody>
+        <?php 
+            if(count($outbound)>0){
+                foreach($outbound as $ob){
+                    
+                        switch($ob['element_56']){
+                            case "1":
+                            $carrier = "IWP";
+                            break;
+                            case "4":
+                            $carrier = "Darrell Green";
+                            break;
+                            case "5":
+                            $carrier = "Cruz";
+                            break;
+                            case "2":
+                            $carrier = "other";
+                            break;
+                        }
+                        switch($ob['element_58']){
+                            case "1":
+                                $driver ="Caesar";
+                            break;
+                            case "4":
+                                $driver = "Jesus";
+                            break;
+                            case "2":
+                                $driver = "Other";
+                            break;
+                        }
+                    echo "<tr>                    
+                        <td>$creator</td>
+                        <td>$ob[date_created]</td>
+                        <td>$ob[element_4]</td>
+                        <td>$ob[element_50]</td>
+                        <td>$ob[element_52]</td>
+                        <td>$ob[element_54]</td>
+                        <td>$ob[element_55]</td>
+                        <td>$carrier</td>
+                        <td>$driver</td>
+                        <td>$ob[element_60]</td>
+                        <td>$ob[element_61]</td>          
+                        <td><a href='ER.php?truck=$ob[id]' rel='shadowbox'><img src='img/search.jpg'/></a></td>
+                        <td><a href='BOL.php?from_io=1&wtn=$ob[element_55]'  rel='shadowbox'><img src='img/table_edit.png'/></a></td>              
+                    </tr>";
+                }
+            }
+        ?>
+        </tbody>
+    </table></form>
+  </div>
+   <div id="fragment-9">
+    <?php
+     
+        if(isset($_POST['pet_food'])){
+            unset($ib);
+            foreach($_POST as $name=>$value){
+                switch($name){
+                    case "pet_food_from":
+                        if(strlen($value)>0 && $value !=' '){
+                            $ib[] = " DATE(date_created) >='$value'";
+                        }
+                    break;
+                    case "pet_food_to":
+                        if(strlen($value)>0 && $value !=' '){
+                             $ib[] = " DATE(date_created) <='$value'";
+                        }
+                    break;
+                }
+            }
+            
+            if(!empty($ib)>0){
+                $string = " AND ".implode(" AND ", $ib);
+            }
+            //echo "SELECT * FROM Inetforms.ap_form_43256 WHERE element_1 = 4 $string";
+            $outbound = $db->query("SELECT * FROM Inetforms.ap_form_43256 WHERE element_1 = 9 $string");
+        }else{
+            $outbound = $db->query("SELECT * FROM Inetforms.ap_form_43256 WHERE element_1 = 9");
+        }
+    
+    ?>
+    <form action="CompletedIO.php" method="POST">
+    <table class="myTable"> 
+        <thead>
+            <tr><td><input class="from" type="text" name="pet_food_from" value="<?php echo $_POST['pet_food_from']; ?>" placeholder="FROM"/></td><td>TO</td><td><input class="to" type="text" name="pet_food_to" value="<?php echo $_POST['pet_food_to']; ?>"  placeholder="TO"/></td><td><input type="submit" name="pet_food"  value="Search"/></td></tr>
+            <tr>
+                <th>Created By</th>
+                <th>Date</th>
+                <th>Status</th>                
+                <th>Commodity</th>
+                <th>Ship From:</th>
+                <th>Net Weight</th>
+                <th>Weight Ticket</th>
+                <th>Carrier</th>
+                <th>Driver</th>
+                <th>Pickup</th>
+                <th>Trailer</th>
+                <th>Notes</th>
+                <!--<th>Time In</th>
+                <th>Time Out</th>
+                <th>Incoming Weight Cert </th>
+                <th>Incoming Gross</th>
+                <th>Incoming Tare </th>
+                <th>Incoming Net </th>-->
+                <td>View Lab Results</td>
+                <td>View BOL</td>
+                <td>Edit Entry</td>
+            </tr>
+        </thead>
+        <tbody>
+        <?php
+            if(count($outbound)>0){
+                foreach($outbound as $ob){
+                    switch($ob['element_114']){
+                            case "1":
+                            $creator = "Johnny";
+                            break;
+                            case "2":
+                            $creator = "Mario";
+                            break;
+                            case "3":
+                            $creator = "Other";
+                            break;
+                        }
+                        switch($ob['element_129']){
+                            case "1":
+                            $comm = "By-Product Ext Boxed";
+                            break;
+                            case "4":
+                            $comm = "Corrugated";
+                            break;
+                            case "5":
+                            $comm = "PP Bags";
+                            break;
+                            case "6":
+                            $comm = "Compost";
+                            break;
+                            case "7":
+                            $comm = "Waste to Energy";
+                            break;
+                            case "3":
+                            $comm = "Other";
+                            break;
+                            
+                        }
+                        switch($ob['element_131']){
+                            case "1":
+                            $shipto = "Sparks, NV";
+                            break;
+                           
+                            case "2":
+                            $shipto = "Other";
+                            break;
+                        }
+                        switch($ob['element_135']){
+                            case "1":
+                            $carrier = "IWP";
+                            break;
+                            case "7":
+                            $carrier = "Darrell Green";
+                            break;
+                            case "6":
+                            $carrier = "Cruz";
+                            break;
+                            case "2":
+                            $carrier = "other";
+                            break;
+                        }
+                        switch($ob['element_137']){
+                            case "1":
+                                $driver ="Caesar";
+                            break;
+                            case "4":
+                                $driver = "Jesus";
+                            break;
+                            case "2":
+                                $driver = "Other";
+                            break;
+                        }
+                        switch($ob['element_142']){
+                            case "1":
+                                $pickup ="30 Yd Comp W2E";
+                            break;
+                            case "4":
+                                $pickup = "30 Yd Open Top W2E";
+                            break;
+                            case "5":
+                                $pickup = "Corn Cleanout";
+                            break;
+                            case "2":
+                                $pickup = "Recycling Bale Trailer";
+                            break;
+                            case "3":
+                                $pickup = "Third Option";
+                            break;
+                        }
+                    echo "<tr>                    
+                        <td>$creator</td>
+                        <td>$ob[date_created]</td>
+                        <td>$ob[element_4]</td>
+                        <td>$comm</td>
+                        <td>$shipto</td>
+                        <td>$ob[element_133]</td>
+                        <td>$ob[element_134]</td>
+                        <td>$carrier</td>
+                        <td>$driver</td>       
+                        <td>$pickup</td>
+                        <td>$ob[element_140]</td>
+                        <td>$ob[element_141]</td>
+                       
+                        <td><a href='ER.php?truck=$ob[id]' rel='shadowbox'><img src='img/search.jpg'/></a></td>
+                        <td><a href='BOL.php?from_io=1&wtn=$ob[element_43]'  rel='shadowbox'><img src='img/table_edit.png'/></a></td>
+
+                        <td><a href='TCL.php?entry_id=$ob[id]' rel='shadowbox;width=800px;'><img src='img/edit-icon.jpg' title='Edit Sample' style='width:20px;height:20px;'/></a></td>
+                    </tr>";
+                }
+            }
+        ?>
+        </tbody>
+    </table></form>
+  </div>
+  
+</div>
+<script>
+$(".from").datepicker({dateFormat: "yy-mm-dd",changeMonth: true, changeYear: true});
+$(".to").datepicker({dateFormat: "yy-mm-dd",changeMonth: true, changeYear: true});
+</script>
