@@ -1,0 +1,6 @@
+<table style="width: 100%;margin:auto;">
+<tr style="background:-moz-linear-gradient(center top , #e7edf7, #adbef7) repeat scroll 0 0 rgba(0, 0, 0, 0);">
+
+<td class="cell_label">#</td><td class="cell_label"><a href="index.php?task=container_list&amp;sort_direction=ASC&amp;sort_field=c.sb_container_id">ID</a></td><td class="cell_label"><a href="index.php?task=container_list&amp;sort_direction=ASC&amp;sort_field=c.date_delivered">Delivered</a></td><td class="cell_label"><a href="index.php?task=container_list&amp;sort_direction=ASC&amp;sort_field=source_title">Source</a></td><td class="cell_label"><a href="index.php?task=container_list&amp;sort_direction=ASC&amp;sort_field=c.stock_id">Stock ID</a></td><td class="cell_label"><a href="index.php?task=container_list&amp;sort_direction=ASC&amp;sort_field=c.container_class_id">Class</a></td><td class="cell_label"><a href="index.php?task=container_list&amp;sort_direction=ASC&amp;sort_field=cc.capacity">Capacity</a></td><td class="cell_label"><a href="index.php?task=container_list&amp;sort_direction=ASC&amp;sort_field=c.location_id">loc ID</a></td><td class="cell_label"><a href="index.php?task=container_list&amp;sort_direction=ASC&amp;sort_field=l.location_name">Location</a></td></tr>
+
+</table>
