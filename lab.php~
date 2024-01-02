@@ -1,0 +1,67 @@
+<style>
+body{
+    padding:10px 10px 10px 10px;
+    margin:10px 10px 10px 10px;
+} 
+li {
+margin-bottom:5px;
+}
+</style>
+<ol>
+<li><a href="https://inet.iwpusa.com/PendingTests.php" target="_blank">Pending Lab Samples</a></li>
+<li><a href="https://inet.iwpusa.com/CompletedTests.php" target="_blank">Completed Lab Samples</a></li>
+<li><a href="https://inet.iwpusa.com/DLS.php" target="_blank">Daily Lab Sheet</a></li>
+
+<li><a href="https://inet.iwpusa.com/OSR.php" target="_blank">Operator Sample Request</a> </li>
+<li><a href="https://inet.iwpusa.com/ER.php" target="_blank">Enter Lab Results</a></li>
+
+<li><a href="https://inet.iwpusa.com/TCL.php" target="_blank">Inbound and Outbound Sample Log</a></li>
+<li><a href="https://inet.iwpusa.com/CompletedIO.php" target="_blank">Inbound and Outbound Dashboard</a></li>
+
+<li><a href="https://inet.iwpusa.com/LotSample.php" target="_blank">Lot Sample</a></li>
+<li><a href="https://inet.iwpusa.com/LSL.php" target="_blank">Lot Sample Dashboard</a></li>
+
+<li><a href="https://inet.iwpusa.com/CottonTest.php" target="_blank">Cotttonseed Testing Log</a></li>
+<li><a href="https://inet.iwpusa.com/CL.php" target="_blank">Cotttonseed Testing Dashboard</a></li>
+
+<li><a href="https://inet.iwpusa.com/AZCottonTest.php" target="_blank">AZ Cotttonseed Testing Log</a></li>
+<li><a href="https://inet.iwpusa.com/AZCL.php" target="_blank">AZ Cotttonseed Testing Dashboard</a></li>
+
+<li><a href="https://inet.iwpusa.com/PendingTests.php" target="_blank">Pending Lab Samples</a></li>
+<li><a href="https://inet.iwpusa.com/CompletedTests.php" target="_blank">Completed Lab Samples</a></li>
+
+<li><a href="https://inet.iwpusa.com/BOL.php" target="_blank">Bill of Lading</a></li>
+<li><a href="https://inet.iwpusa.com/BOL.php" target="_blank">BOL Detail Entry</a></li>
+</ol>
+
+
+
+ 
+
+
+
+
+ 
+
+
+
+ 
+
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+ 
+
+
+
+ 
+
