@@ -1,0 +1,120 @@
+# Edit this file to introduce tasks to be run by cron.
+# 
+# Each task to run has to be defined through a single line
+# indicating with different fields when the task will be run
+# and what command to run for the task
+# 
+# To define the time you can provide concrete values for
+# minute (m), hour (h), day of month (dom), month (mon),
+# and day of week (dow) or use '*' in these fields (for 'any').# 
+# Notice that tasks will be started based on the cron's system
+# daemon's notion of time and timezones.
+# 
+# Output of the crontab jobs (including errors) is sent through
+# email to the user the crontab file belongs to (unless redirected).
+# 
+# For example, you can run a backup of all your user accounts
+# at 5 a.m every week with:
+
+# 0 5 * * 1 tar -zcf /var/backups/home.tgz /home/
+# 
+# For more information see the manual pages of crontab(5) and cron(8)
+# 
+# m h  dom mon dow   command
+
+5 0 * * * php /var/www/html/cronjobs/calculate_avg_gallons_per_month.php > /dev/null
+
+
+45 0 * * * php /var/www/html/cronjobs/check_existing_schedules_if_fire.php > /dev/null 
+
+
+15 1 * * * php /var/www/html/cronjobs/finddupe2.php > /dev/null
+
+
+0 19 * * * mysqldump -u 'root' -p'Chr0nOTrigg3r!' -all-databases > '/media/iwp2/My Passport/05-20-2019 Red/$("date +%b_%d_%Y_%H_%M").sql' 
+
+MAILTO ="cronjobs@iwpusa.com"
+0 0 * * * php /var/www/html/issue_checker.php > /dev/null
+
+MAILTO = "cronjobs@iwpusa.com"
+5 19 * * 5 php /var/www/html/grease/not_scheduled.php > /dev/null
+
+5 22 * * 5 php /var/www/html/grease/test_stop.php > /dev/null
+
+20 * * * * php /var/www/html/bakery/cronjobs/calculate_avg_gallons_per_month.php > /dev/null
+
+
+5 2 * * * php /var/www/html/bakery/cronjobs/check_existing_schedules_if_fire.php > /dev/null
+
+
+35 2 * * * php /var/www/html/bakery/cronjobs/finddupe2.php > /dev/null
+
+
+5 3 * * * php /var/www/html/bakery/cronjobs/finddupe2_single.php > /dev/null
+
+
+#35 3 * * * php /var/www/html/bakery/cronjobs/check_service_schedules_if_fire.php > /dev/null
+
+
+7 22 * * * php /var/www/html/bakery/cronjobs/get_boss.php > /dev/null
+
+MAILTO = "cronjobs@iwpusa.com"
+*/30 * * * * php /var/www/html/bakery/cronjobs/insert_scale.php > /dev/null
+
+MAILTO = "cronjobs@iwpusa.com"
+*/30 * * * * php /var/www/html/bakery/cronjobs/insert_scaleCircle.php > /dev/null
+
+MAILTO = "cronjobs@iwpusa.com"
+*/30 * * * * php /var/www/html/bakery/cronjobs/insert_scaleBimbo2.php > /dev/null
+
+MAILTO = cronjobs@iwpusa.com"
+*/30 * * * * php /var/www/html/bakery/cronjobs/insert_scaleBimbo3.php > /dev/null
+
+MAILTO = "cronjobs@iwpusa.com"
+*/30 * * * * php /var/www/html/bakery/cronjobs/insert_scaleBimboMB.php > /dev/null
+
+MAILTO = "cronjob@iwpusa.com"
+*/30 * * * * php /var/www/html/bakery/cronjobs/insert_scaleBimbo7.php > /dev/null
+
+MAILTO = "cronjobs@iwpusa.com"
+15 21 * * * php /var/www/html/grease/cronjobs/master_lock.php > /dev/null
+
+MAILTO = "cronjobs@iwpusa.com"
+*/30 * * * * php /var/www/html/bakery/cronjobs/insert_scaleRuiz.php > /dev/null
+
+MAILTO = "cronjobs@iwpusa.com"
+21 21 * * * php /var/www/html/cronjobs/wheyupdate.php > /dev/null
+
+MAILTO = "cronjobs@iwpusa.com"
+5 9 * * 1 php /var/www/html/haulerscron.php > /dev/null
+
+MAILTO ="cronjobs@iwpusa.com"
+5 7 * * 1 php /var/www/html/productcron.php > /dev/null 
+
+MAILTO ="cronjobs@iwpusa.com"
+*/1 * * * * php /var/www/html/testscale1.php > /dev/null
+
+*/30 * * * * php /var/www/html/scale_to_mach.php > /dev/null
+
+MAILTO = "cronjobs@iwpusa.com"
+*/2 * * * * php /var/www/html/cronjobtruck.php > /dev/null
+
+MAILTO = "cronjobs@iwpusa.com"
+*/2 * * * * php /var/www/html/cronvendors.php > /dev/null
+
+MAILTO ="cronjobs@iwpusa.com"
+*/10 * * * * php /var/www/html/haulercsv.php > /dev/null
+
+MAILTO ="cronjobs@iwpusa.com"
+* */4 * * * php /var/www/html/shipment_check.php > /dev/null
+
+MAILTO ="cronjobs@iwpusa.com"
+0 4 * * * php /var/www/html/stops.php > /dev/null 
+
+MAILT ="cronjobs@iwpusa.com"
+0 3 * * * php /var/www/html/grease/fix_origin.php > /dev/null
+
+MAILTO ="cronjobs@iwpusa.com"
+00 18 * * * /var/www/html/cronjobs/backup.sh
+
+0 0 * * * php /var/www/html/grease/cronjobs/credits.php > /dev/null
