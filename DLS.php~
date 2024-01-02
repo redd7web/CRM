@@ -1,0 +1,3 @@
+<iframe height="630" allowTransparency="true" frameborder="0" scrolling="no" style="width:100%;border:none" src="https://inet.iwpusa.com/machforms/machform/widget.php?key=43939x3d77c361a6" title="Lot Sample Log"><a href="https://inet.iwpusa.com/machforms/machform/widget.php?key=43939x3d77c361a6" title="Lot Sample Log">Lot Sample Log</a></iframe>
+
+<iframe height="400" allowTransparency="true" frameborder="0" scrolling="no" style="width:100%;border:none" src="https://inet.iwpusa.com/machforms/machform/widget.php?key=43939xd1811cf495" title="Lot Standards Ratio"><a href="https://inet.iwpusa.com/machforms/machform/widget.php?key=43939xd1811cf495" title="Lot Standards Ratio">Lot Standards Ratio</a></iframe>
