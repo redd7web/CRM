@@ -1,10 +1,17 @@
 <?php
 ini_set("display_errors",0);
-session_start();
 include "protected/global.php";
 
-if(isset($_POST['prvw'])){
- 
+if(isset($_GET['type'])){
+    switch($_GET['type']){
+        case "oil":
+        $ikg = new IKG($_GET['route']);
+        break;
+        case "util":
+        break;
+        case "grease":
+        break;
+    }
     
     
     function get_lat_long($address){
@@ -23,9 +30,8 @@ if(isset($_POST['prvw'])){
     
     
     
-        $latlong    =   get_lat_long("$_POST[facility]"); // create a function with the name "get_lat_long" given as below
+        $latlong    =   get_lat_long("$ikg->address"); // create a function with the name "get_lat_long" given as below
         $map        =   explode(',' ,$latlong);
-        array_pop($map);
         $mapLat         =   $map[0];
         $mapLong    =   $map[1]; 
     //print_r($gt);
@@ -198,8 +204,6 @@ jQuery(function() {
 	autoOpen: false
   });
   jQuery('.myMap').height(jQuery(window).height() - 100);
-  
-  
 });
 (function() {
   var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
@@ -226,10 +230,7 @@ jQuery(function() {
 </head>
 
 <body onLoad="onBodyLoad()">
-<div id="cover" style="position: fixed;z-index:9999;background:rgba(255,255,255,.5);text-align:center;font-size:40px;top:0px;left:0px;width:100%;height:100%;">Working Please wait</div>
-<?php if(isset($_SESSION['id'])){
-    ?>
-    <div id="fb-root"></div>
+<div id="fb-root"></div>
 
 
 <h2>Imperial Western Products - Route Optimizer  <?php if(isset($_GET['type'])){ echo ": ".$ikg->ikg_manifest_route_number; } ?></h2>
@@ -330,6 +331,7 @@ jQuery(function() {
   <input id="button1" class="calcButton" type="button" value="Calculate Fastest Roundtrip" onClick="directions(0, document.forms['travelOpts'].walking.checked, document.forms['travelOpts'].bicycling.checked, document.forms['travelOpts'].avoidHighways.checked, document.forms['travelOpts'].avoidTolls.checked)">
   <input id="button2" class="calcButton" type="button" value="Calculate Fastest A-Z Trip" onClick="directions(1, document.forms['travelOpts'].walking.checked, document.forms['travelOpts'].bicycling.checked, document.forms['travelOpts'].avoidHighways.checked, document.forms['travelOpts'].avoidTolls.checked)">
   <input id='button3' class="calcButton" type='button' value='Start Over Again' onClick='startOver()'>
+  <input type="submit" value="Save Route Order" id="save_order" style="background: #f6f6f6 url('images/ui-bg_glass_100_f6f6f6_1x400.png') repeat-x scroll 50% 50%;border: 1px solid #cccccc;color: #0000a0; font-weight: bold; width: 200pt;padding: 0.4em 1em;cursor:pointer;" />
  
 
 </div>
@@ -351,13 +353,15 @@ jQuery(function() {
   <form name="listOfLocations" onSubmit="clickedAddList(); return false;" id="mapped">
   <textarea name="inputList" rows="10" cols="70" placeholder="">
   <?php
-    if(isset($_POST['prvw'])){
-       echo "$_POST[facility] \r\n";
-       $new = str_replace("-","\r\n", $_POST['test']);
-       echo $new;
+    if(isset($_GET['type'])){
+        echo $ikg->facility_address."\r\n";
+        foreach($ikg->account_numbers as $stops){
+            $acnt = new Account($stops);
+            echo "$acnt->acount_id|$acnt->address $acnt->city, $acnt->state $acnt->zip $acnt->country \r\n";
+        }
     }
   ?>
-  </textarea><br/>
+  </textarea><br>
   <input type="button" id="auto" value="Add list of locations" onClick="clickedAddList()" />
 </form></div>
 <div id="exportData_hidden" style="visibility: hidden;"></div>
@@ -380,23 +384,49 @@ jQuery(function() {
 
 
 <script>
-    
-        
-    jQuery("#cover").hide();
-     jQuery("document").ready(function(){
+    jQuery("document").ready(function(){
        setTimeout('jQuery("#auto").trigger("click")',5000);        
     });
-   
     
-  
+    jQuery("#save_order").click(function(){
+        var reordered = "";    
+         jQuery(".centered-directions").each(function(i){
+            if(jQuery(this).text().length>0 && jQuery(this).text() !=" " && jQuery(this).text() !="" ){
+                //alert(jQuery(this).text());
+                reordered +=jQuery(this).text()+"\n";
+            }
+         })
+         
+         
+        if(reordered.length >0){
+            //alert( jQuery("#outputAddrList").val() );
+            <?php 
+                switch($_GET['type']){
+                    case "oil":
+                    ?>
+                    jQuery.post("new_route_order.php",{orders:reordered,route_id:<?php echo $_GET['route']; ?>},function(data){
+                        alert("New Route Order Saved!");
+                        //jQuery("#debug").html(data);  
+                    });
+                    
+                    <?php
+                    break;
+                    case "util":
+                    break;
+                    case "grease":
+                    break;
+                }
+            
+            ?>
+            
+           
+        }else{
+            alert("Please round/fastest trip first!");
+        }
+         
+    });
     </script>
     <div id="debug"></div>
-    <?php
-}else {
-    ?>
-    Your session has expired, please re-login <a href="home.php">here</a>.
-    <?php
-} ?>
 </body>
 
 </html>
