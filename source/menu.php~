@@ -1,0 +1,146 @@
+<?php if(isset($_SESSION['bak_id'])){ ?>
+<ul class="dropdown" style="margin-left: -24px;">
+                <li>Management
+                    <ul class="sub_menu">
+                        <!--<li><a href="management.php?task=overview">Overview</a>
+                            <ul><li><a href="management.php?task=driverslog">Drivers Log</a></li></ul>
+                        </li>-->
+                         <!--<li><a>Tools</a><ul><li>
+                         <a href="roi.php" target="_blank">ROI Calculator</a>
+                        </li>
+                        <li><a href="management.php?task=jobcost">Job Cost Calculator</a></li>
+                        </ul></li>-->
+                        <li><a href="management.php?task=reports">Reports</a>
+                            <ul>
+                            <!--<li><a href="management.php?task=newloc">New Locations</a></li>-->
+                            <li><a href="management.php?task=ops">Bakery Pickup Summary</a></li>
+                            <li><a href="management.php?task=ocd">Bakery Collection by Driver</a></li>
+                            <!--<li><a href="management.php?task=cancel">Account Cancellations</a></li>-->
+                            <li><a href="management.php?task=expire">Account Expirations</a></li>
+                           <!-- <li><a href="management.php?task=freq">Pickup Frequency</a></li>-->
+                            <li><a href="management.php?task=zero">Zero-Pound Pickups</a></li>
+                           <!-- <li><a href="management.php?task=theft">Bakery Theft</a></li> -->
+                            <li><a href="management.php?task=delivery">Container Deliveries</a></li>
+                            <!--<li><a href="management.php?task=collected">Collected Code Reds</a></li>-->
+                            <li><a href="management.php?task=csupport">Subhauler Summary</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="management.php">Exports </a>
+                            <ul>
+                                <li><a href="management.php?task=picknpay">Pickups &amp; Payments</a></li>
+                                <li><a href="management.php?task=alloil">All Bakery Collections</a></li>
+                                <li><a href="management.php?task=oilperloc">Bakery Collections Per Location/Zone</a></li>
+                                <li><a href="management.php?task=affil">Affiliate Breakout Per Route</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="management.php?task=indices">Payment Indices </a>
+                           <!-- <ul>
+                                <li><a href="management.php?task=indices">CBOT</a></li>
+                                <li><a href="management.php?task=indices">Wallstreet</a></li>
+                            <ul>-->
+                        </li>
+                        <li><a href="">Users</a>
+                            <ul>
+                            <li><a href="management.php?task=staff">Staff(Admin Only)</a></li>
+                            <li><a href="management.php?task=users">Staff (All)</a></li>
+                            <li><a href="management.php?task=adduser">Add User</a></li>
+                            </ul>
+                        </li>                        
+                        <li><a href="management.php?task=xlog">Transaction Log</a></li>
+                        <li><a href="management.php?task=friendly">Add Subhauler</a></li>
+                        <li><a href="management.php?task=notes">Notes</a></li>
+                        <li><a href="management.php?task=containers">Asset List</a>
+                            <!--<ul><li>Sub Containers</li></ul>-->
+                        </li>
+                        <li><a href="management.php?task=vehicles">Vehicles</a></li>
+                    </ul>
+                </li>
+                <li>Customers
+                    <ul class="sub_menu">                        
+                        <li><a href="customers.php?task=accounts">Accounts</a></li>
+                        <li><a href="customers.php?task=newaccount">New Account</a></li>
+                       <!-- <li>
+                        <?php 
+                             if(count($_SESSION['bak_history'])>0){
+                                echo "<a href='#'>History</a>";   
+                             } else {
+                                echo "History";
+                             }
+                        ?>
+                        
+                           <ul class="sub_menu">
+                            <?php 
+                            if(count($_SESSION['bak_history'])>0){
+                                foreach ($_SESSION['bak_history'] as $places){
+                                    echo "<li><a href='$places[url]'>$places[name]</a></li>";
+                                }
+                            } else {
+                                echo "<li>empty</li>";
+                            }
+                            
+                            ?>
+                            
+                            </ul> -->
+                        </li>
+                        <li><a href="customers.php?task=issues">Service Issues</a></li>
+                        <li><a href="customers.php?task=tracker">Startup Tracker</a></li>
+                        <li><a href="customers.php?task=services">Ending Service</a></li>                           
+                    </ul>
+                </li> 
+                <li>Scheduling
+                    <ul class="sub_menu">
+                        <!--<li><a href="scheduling.php?task=fgrid">Facility Grid</a></li>-->
+
+                        <li><a href="scheduling.php">Frontloader Code Red</a>
+                            <ul>
+                                <li><a href="scheduling.php?task=oilcomplete">Completed</a></li>
+                                <li><a href="scheduling.php?task=oilongoing">Ongoing</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="scheduling.php">Utility Code Red</a>
+                            <ul>
+                                <li><a href="scheduling.php?task=utilalarmcomplete">Completed</a></li>
+                                <li><a href="scheduling.php?task=utilongoign">Ongoing</a></li>
+                            </ul>
+                        </li>
+                    
+                        <li><a href="scheduling.php?task=crequest">Single Code Red</a></li>                    
+                        
+                        <li><a href="scheduling.php">Bakery Pickup Frontloader</a><ul>
+                            <li><a href="scheduling.php?task=schoipu">Scheduled Pickups</a></li>                            
+                            <li><a href="scheduling.php?task=rop">Routed Pickups</a></li>
+                            <li><a href="scheduling.php?task=cop">Completed Pickups</a></li>
+                        </ul>
+                        </li>
+                        <li><a href="scheduling.php">Utility </a>
+                            <ul>
+                                <li><a href="scheduling.php?task=suc">Scheduled Utility Call</a></li>
+                                <li><a href="scheduling.php?task=ruc">Routed Utility Call</a></li>
+                                <li><a href="scheduling.php?task=cuc">Completed Utility Call</a></li>
+                            </ul>
+                        </li>
+                       <li><a href="scheduling.php">Bakery Pickup Single</a>
+                            <ul>
+                                 <li><a href="scheduling.php?task=sgt">Scheduled Pickup</a></li>
+                                <li><a href="scheduling.php?task=rgt">Routed Pickup</a></li>
+                                <li><a href="scheduling.php?task=cgt">Completed Pickup</a></li>
+                            </ul>
+                        </li>
+                        <!--<li><a href="scheduling.php?task=shifts">Shifts</a></li>                    
+                        <li><a href="scheduling.php?task=pickexp">Pickups Export</a></li>-->
+                    </ul>
+                </li> 
+                <!---   
+                <li>Sales
+                    <ul class="sub_menu">
+                        <li>My Leads</li>
+                        <li>New Sales Lead</li>
+                        <li>Sales Reps</li>
+                        <li>Sales Lead Assignments</li>
+                        <li>Sales Lead Clean Up</li>
+                        <li>Report: Monthly Sales by Rep</li>
+                    </ul>
+                </li>
+                --->                      
+            </ul>
+<?php } ?>

@@ -1,0 +1,124 @@
+ <div id="footer" style="color: black;background:#cccccc;">
+
+<?php if(isset($_SESSION['id'])){ 
+    
+    $mailbyme  = $db->where('reported_by',$person->user_id)->orderby("date_created","DESC")->get($dbprefix."_issues");
+    //$mailforme = $db->where('assigned_to',$person->user_id)->orderby("date_created","DESC")->get($dbprefix."_issues");
+    $privatebyme =  $db->where('author',$person->user_id)->orderby("date","DESC")->get($dbprefix."_private");
+    //$privateforme = $db->where('recipient',  $person->user_id)->orderby("date","DESC")->get($dbprefix."_private");
+    ?>
+    
+    <div id="messagenemergncy" style="width: 750px;height:181px;margin:0 auto;">
+        <div id="messagebox" style="width: 750px;height:125px;background:white;">
+        
+            <div id="tabs">
+                <ul>
+                <li style="margin-right: 10px;background:transparent;border:0px solid #bbb;text-transform:uppercase;color:white;">Issues</li>
+                <li><a href="#following" style="color:rgb(58, 132, 43) ;">Following (0)</a></li>
+                <li><a href="#indbox" style="color:rgb(58, 132, 43) ;">For me (0)</a></li>
+                <li><a href="#sendboxx" style="color:rgb(58, 132, 43) ;">By me(0)</a></li>
+                <li><a href="#privatein" style="color:rgb(58, 132, 43) ;">Private for me(0)</a></li>
+                
+                <li><a href="#fragment-4" style="color:rgb(58, 132, 43) ;">Private by me(0)</a></li>
+                 
+                </ul>
+                <div id="following">
+                    
+                </div>
+                <div id="indbox">
+                    <table style="width: 100%;">
+                    <tr><td style="padding: 0px 0px 0px 0px;">#</td><td>Author</td><td>Date</td><td>Info</td><td>View</td></tr>
+                    <?php
+                        /*if(count($mailforme) !=0){
+                            foreach($mailforme as $msg2){
+                                echo "<tr><td style=\"padding: 0px 0px 0px 0px;\">$msg2[issue_no]</td><td>". uNumToName($msg2['reported_by']) ."</td><td>$msg2[date_created]</td><td style='color:black'>".account_NumtoName($msg2['account_no'] ) ."<br/> $msg2[message]</td><td><a href='viewIssues.php?id=$msg2[issue_no]' rel='shadowbox;width=700;'> <img src='img/table_edit.png'/></a></td></tr>";
+                            }
+                        }else
+                        {
+                            echo "<tr><td colspan='4' style='vertical-align:middle;text-align:center;'>No Issues for me</td></tr>";
+                        }
+                    */
+                    ?>
+                    </table>
+                </div>
+                <div id="sendboxx">
+                    <table style="width: 100%;">
+                    <tr><td style="padding: 0px 0px 0px 0px;">#</td><td>Recipient</td></td><td>Date</td><td>Info</td><td>View</td></tr>
+                    <?php 
+                    /*if(count($mailbyme) !=0){
+                        foreach($mailbyme as $msg){                            
+                            echo "<tr><td style=\"padding: 0px 0px 0px 0px;\">$msg[issue_no]</td><td>". uNumToName($msg['assigned_to']) ."</td><td>$msg[date_created]</td><td>".account_NumtoName($msg['account_no'] ) ."<br/> $msg[message]</td><td><a href='viewIssues.php?id=$msg[issue_no]' rel='shadowbox;width=700;'> <img src='img/table_edit.png'/></a></td></tr>";
+                        }
+                    }else
+                        {
+                            echo "<tr><td colspan='4' style='vertical-align:middle;text-align:center;'>No Issues</td></tr>";
+                        }*/
+                    
+                    ?>
+                    </table>
+                </div>
+                <div id="privatein">
+                 <table style="width: 100%;">
+                    <tr><td style="padding: 0px 0px 0px 0px;">#</td><td>Author</td><td>Message</td><td>Date</td></tr>
+                    <?php
+                       /* if(count($privateforme) !=0){
+                            foreach($privateforme as $privyx){
+                                echo "<tr>
+                                <td style=\"padding: 0px 0px 0px 0px;\">$privyx[id]</td>
+                                <td>";
+                                echo uNumToName($privyx['author']);
+                                echo "</td>
+                                <td>$privyx[message]</td>                                
+                                <td>$privyx[date]</td>
+                                <td><a href='pmreply.php?id=$privyx[id]' rel='shadowbox;width=700;'><img src='img/7866_6129_64_mail_reply_icon.png' style='width:30px;height:30px;'/></td>
+                                </tr>";
+                            }                        
+                        } else {
+                            echo "<tr><td colspan='4' style='vertical-align:middle;text-align:center;'>No Private Messages</td></tr>";
+                        }*/                            
+                        ?>
+                    </table>
+                </div>
+                
+                <div id="fragment-4">
+                    <table style="width: 100%;">
+                    <tr><td style="padding: 0px 0px 0px 0px;">#</td><td>Recipient</td><td>Message</td><td>Date</td></tr>
+                        <?php
+                        /*if(count($privatebyme) !=0){
+                             foreach($privatebyme as $privy){
+                                echo "<tr>
+                                <td style=\"padding: 0px 0px 0px 0px;\">$privy[id]</td>
+                                <td>
+                                ";
+                                echo uNumToName($privy['recipient']);
+                                echo "</td>
+                                <td>$privy[message]</td>
+                                
+                                <td>$privy[date]</td>
+                                <td><a href='pmreply.php?id=$privy[id]' rel='shadowbox;width=700;'><img src='img/7866_6129_64_mail_reply_icon.png' style='width:30px;height:30px;'/></td>
+                                </tr>
+                                
+                                ";
+                            }
+                        }else {
+                            echo "<tr><td colspan='4' style='vertical-align:middle;text-align:center;'>No Private Messages</td></tr>";
+                        }*/
+                        ?>
+                    </table>
+                </div>
+                
+            </div>
+        
+        </div>
+        <div id="emergency" style="width: 650px;height:56px;background:#ccc;">
+            <div class="emergbutton" style="margin-top: 3px;margin-bottom:3px;height:50px;width:50px;;float:left;;background:silver;"></div>
+            <div class="emergbutton" style="margin-top: 3px;margin-bottom:3px;height:50px;width:50px;;float:left;margin-left:10px;background:silver;"></div>
+            <div class="emergbutton" style="margin-top: 3px;margin-bottom:3px;height:50px;width:50px;;float:left;margin-left:10px;background:silver"></div>
+            <div class="emergbutton" style="margin-top: 3px;margin-bottom:3px;height:50px;width:50px;;float:left;margin-left:10px;background:silver"></div>
+            <div class="emergbutton" style="margin-top: 3px;margin-bottom:3px;height:50px;width:50px;;float:left;margin-left:10px;background:silver"></div>
+            <div class="emergbutton" style="margin-top: 3px;margin-bottom:3px;height:50px;width:50px;;float:left;margin-left:10px;background:silver"></div>
+        </div>
+    </div>
+    <?php } ?>
+</div>
+<script src="js/general.js"></script>

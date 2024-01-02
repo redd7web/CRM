@@ -1,0 +1,13 @@
+<?php
+include "protected/global.php";
+
+$get = $db->query("SELECT account_ID FROM iwp_accounts");
+
+if(count($get)>0){
+    foreach ($get as $acnts){
+        $account = new Account($acnts['account_ID']);
+        $db->query("UPDATE iwp_accounts SET barrel_capacity = ".$account->total_barrel_capacity." WHERE account_ID=$each[account_ID]");
+    }
+}
+
+?>
